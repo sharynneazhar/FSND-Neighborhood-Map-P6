@@ -1,8 +1,16 @@
 $icon-font-path: '../fonts/';
 
+// Google fonts imports
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Roboto:400,300');
+
 // bower:scss
 @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 // endbower
+
+@import
+  "variables",
+  "framework",
+  "searchbar";
 
 .browserupgrade {
   margin: 0.2em 0;
@@ -12,9 +20,9 @@ $icon-font-path: '../fonts/';
 }
 
 /* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+html, body {
+  padding: 0;
+  margin: 0;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -77,8 +85,8 @@ body {
   .header,
   .marketing,
   .footer {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   /* Space out the masthead */

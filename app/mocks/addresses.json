@@ -1,0 +1,20 @@
+{
+  "home": {
+    "streetAddress": "21606 W 97th Terrace",
+    "city": "Lenexa",
+    "state": "Kansas",
+    "zipCode": 66220
+  },
+  "work": {
+    "streetAddress": "1812 Broadway Blvd",
+    "city": "Kansas City",
+    "state": "Missouri",
+    "zipCode": 66213
+  },
+  "school": {
+    "streetAddress": "1425 Jayhawk Blvd",
+    "city": "Lawrence",
+    "state": "Kansas",
+    "zipCode": 66045
+  }
+}
