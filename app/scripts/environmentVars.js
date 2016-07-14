@@ -1,3 +1,5 @@
+const ADDRESSES = '../mocks/addresses.json';
+
 const DEFAULT_LOC = [39.0997, -94.5786];
 
 const GOOGLE_API_KEY = 'AIzaSyCKioYCg26ODl5A4Z2K03OFkXJRT1mBpRk';

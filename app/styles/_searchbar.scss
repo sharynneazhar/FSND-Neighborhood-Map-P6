@@ -1,7 +1,7 @@
-.searchbar {
+#searchbar {
   position: relative;
   z-index: 1;
-  
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -25,5 +25,11 @@
   .search-input {
     border: none;
     box-shadow: none;
+  }
+}
+
+@media screen and (min-width: 667px) {
+  #searchbar {
+    width: 400px;
   }
 }
