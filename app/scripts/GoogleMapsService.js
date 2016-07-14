@@ -46,17 +46,15 @@ var GoogleService = {
   },
 
   getPersonalMarkers: function() {
-    $.getJSON(PERSONALS, function(data) {
-      $.each(data, function(place, info) {
-        var markerHold = new google.maps.Marker({
-          title: info.title,
-          position: new google.maps.LatLng(
-            info.lat,
-            info.long
-          ),
-          map: map,
-          animation: google.maps.Animation.DROP
-        });
+    $.each(PERSONALS, function(place, info) {
+      var markerHold = new google.maps.Marker({
+        title: info.title,
+        position: new google.maps.LatLng(
+          info.lat,
+          info.long
+        ),
+        map: map,
+        animation: google.maps.Animation.DROP
       });
     });
   },
