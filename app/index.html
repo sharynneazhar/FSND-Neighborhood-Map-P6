@@ -26,18 +26,17 @@
 
     <div id="map"></div>
 
-    <form id="searchbar">
+    <form id="searchbar" data-bind="submit: searchLocation">
       <img class="search-menu" src="images/icons/icn-menubar.png" alt="Menu" />
       <input
         class="form-control search-input"
         type="text"
         name="search"
         placeholder="Search Neighborhood Map"
+        data-bind="value: searchAddress"
       />
       <img class="search-filter" src="images/icons/icn-filter.png" alt="Filter" />
     </form>
-
-
 
 
 
