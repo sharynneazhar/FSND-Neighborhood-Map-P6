@@ -1,6 +1,6 @@
 const DIMS = {
-  "height": $(window).height(),
-  "width": $(window).width()
+  'height': $(window).height(),
+  'width': $(window).width()
 };
 
 const PERSONALS = '../models/personalAddresses.json';
