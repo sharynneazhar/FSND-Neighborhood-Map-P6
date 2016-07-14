@@ -1,3 +1,8 @@
+/*
+  Handles all the services from Google Maps API
+  https://developers.google.com/maps/documentation/javascript/
+*/
+
 var map;
 
 function loadMapScript() {
@@ -10,6 +15,8 @@ function loadMapScript() {
 }
 
 var GoogleService = {
+
+  // Initializes the map background and markers
   init: function() {
     var mapOptions = {
       zoom: 10,
@@ -17,12 +24,17 @@ var GoogleService = {
       mapTypeControl: false,
     };
 
+    if (DIMS.width < 662) {
+      mapOptions.zoom = 8;
+    }
+
     map = new google.maps.Map(
       document.getElementById('map'), mapOptions
     );
 
-    this.getDefaultMarkers();
+    this.getPersonalMarkers();
 
+    // Hide searchbar in streetview
     var streetView = map.getStreetView();
     streetView.addListener('visible_changed', function() {
       if (streetView.getVisible()) {
@@ -33,8 +45,8 @@ var GoogleService = {
     });
   },
 
-  getDefaultMarkers: function() {
-    $.getJSON(ADDRESSES, function(data) {
+  getPersonalMarkers: function() {
+    $.getJSON(PERSONALS, function(data) {
       $.each(data, function(place, info) {
         var markerHold = new google.maps.Marker({
           title: info.title,
@@ -47,6 +59,32 @@ var GoogleService = {
         });
       });
     });
+  },
+
+  getCurrentLocation: function() {
+    // Use HTML5 geolocation
+    // TODO Find a geolocation service - look into Google's
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var currentLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var marker = new google.maps.Marker({
+          title: 'You Are Here',
+          position: new google.maps.LatLng(currentLocation),
+          map: map,
+          animation: google.maps.Animation.DROP
+        });
+        map.setCenter(currentLocation);
+      }, function() {
+        // TODO Use better error messaging
+        console.log('Oops, something went wrong');
+      });
+    } else {
+      // TODO Use better error messaging
+      console.log('Oops, something went wrong');
+    }
   }
 
 };
