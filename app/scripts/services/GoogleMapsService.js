@@ -3,6 +3,16 @@
   https://developers.google.com/maps/documentation/javascript/
 */
 
+const GMAP_KEY = '?key=AIzaSyCKioYCg26ODl5A4Z2K03OFkXJRT1mBpRk';
+const GMAP_BASE_URL = 'http://maps.googleapis.com/maps/';
+const GMAP_FULL_URL = GMAP_BASE_URL + 'api/js' + GMAP_KEY + '&libraries=places&callback=GoogleMapsService.init';
+const GMAP_QUERY_URL = GMAP_BASE_URL + 'api/place/queryautocomplete/json' + GMAP_KEY + '&input=';
+
+const DIMS = {
+  'height': $(window).height(),
+  'width': $(window).width()
+};
+
 var map = null;
 var marker = null;
 
@@ -10,10 +20,7 @@ function loadMapScript() {
   var script = document.createElement('script');
   script.async = true;
   script.type = 'text/javascript';
-  script.src = GOOGLE_MAP_URL
-    + GOOGLE_MAP_KEY
-    + '&libraries=places'
-    + '&callback=GoogleService.init';
+  script.src = GMAP_FULL_URL;
   document.body.appendChild(script);
 }
 
