@@ -24,20 +24,23 @@ function loadMapScript() {
   document.body.appendChild(script);
 }
 
-var GoogleService = {
+var GoogleMapsService = {
 
   // Initializes the map background and markers
   init: function() {
+    var mapContainer = document.getElementById('map');
     var mapOptions = {
       zoom: (DIMS.width < 662) ? 9 : 10,
       center: new google.maps.LatLng(38.951979, -94.837693),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: false,
+      streetViewControl: false
     };
 
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    map = new google.maps.Map(mapContainer, mapOptions);
 
-    this.getMarkers(PERSONALS);
+    //this.getMarkers(PERSONALS);
+    this.getCurrentLocation();
 
     // Hide searchbar in streetview
     var streetView = map.getStreetView();
@@ -90,28 +93,5 @@ var GoogleService = {
       console.log('Your browser does not support geolocation.');
     }
   },
-
-  // Searches for the location specified and return a marker on the map
-  getLocation: function(location) {
-    console.log(location);
-
-    // var geocoder = new google.maps.Geocoder();
-    // var query = GOOGLE_MAP_QUERY + location;
-    // $.getJSON(query, function(data) {
-    //   $.each(data.predictions, function(place, info) {
-    //     geocoder.geocode({'placeId': info.place_id}, function(results, status) {
-    //       if (status === google.maps.GeocoderStatus.OK) {
-    //         map.setCenter(results[0].geometry.location);
-    //         marker = new google.maps.Marker({
-    //           map: map,
-    //           position: results[0].geometry.location
-    //         });
-    //       } else {
-    //         console.log('Geocode was not successful for the following reason: ' + status);
-    //       }
-    //     });
-    //   })
-    // });
-  }
 
 };
