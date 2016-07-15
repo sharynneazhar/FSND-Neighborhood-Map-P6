@@ -30,16 +30,14 @@ var GoogleMapsService = {
   init: function() {
     var mapContainer = document.getElementById('map');
     var mapOptions = {
-      zoom: (DIMS.width < 662) ? 9 : 10,
-      center: new google.maps.LatLng(38.951979, -94.837693),
+      zoom: (DIMS.width < 662) ? 10 : 12,
+      center: new google.maps.LatLng(39.0997, -94.5786),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: false,
       streetViewControl: false
     };
 
     map = new google.maps.Map(mapContainer, mapOptions);
-
-    //this.getMarkers(PERSONALS);
     this.getCurrentLocation();
 
     // Hide searchbar in streetview
@@ -83,7 +81,6 @@ var GoogleMapsService = {
           map: map,
           animation: google.maps.Animation.DROP
         });
-        map.setCenter(currentLocation);
       }, function() {
         // TODO Use better error messaging
         console.log('Oops, we were unable to retrieve your current location.');
