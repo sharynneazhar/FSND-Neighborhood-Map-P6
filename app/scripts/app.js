@@ -9,7 +9,6 @@ var Location = function(data) {}
 
 var ViewModel = function() {
   var self = this;
-
   self.searchAddress = ko.observable('');
 
   this.searchLocation = function() {

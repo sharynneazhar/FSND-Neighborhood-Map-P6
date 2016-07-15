@@ -3,16 +3,17 @@
   https://developers.google.com/maps/documentation/javascript/
 */
 
-var map;
-var marker;
+var map = null;
+var marker = null;
 
 function loadMapScript() {
   var script = document.createElement('script');
-  script.type = 'text/javascript';
   script.async = true;
+  script.type = 'text/javascript';
   script.src = GOOGLE_MAP_URL
     + GOOGLE_MAP_KEY
-    + '&libraries=places&callback=GoogleService.init';
+    + '&libraries=places'
+    + '&callback=GoogleService.init';
   document.body.appendChild(script);
 }
 
@@ -21,20 +22,15 @@ var GoogleService = {
   // Initializes the map background and markers
   init: function() {
     var mapOptions = {
-      zoom: 10,
+      zoom: (DIMS.width < 662) ? 9 : 10,
       center: new google.maps.LatLng(38.951979, -94.837693),
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: false,
     };
 
-    if (DIMS.width < 662) {
-      mapOptions.zoom = 8;
-    }
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    map = new google.maps.Map(
-      document.getElementById('map'), mapOptions
-    );
-
-    this.getPersonalMarkers();
+    this.getMarkers(PERSONALS);
 
     // Hide searchbar in streetview
     var streetView = map.getStreetView();
@@ -47,8 +43,9 @@ var GoogleService = {
     });
   },
 
-  getPersonalMarkers: function() {
-    $.each(PERSONALS, function(place, info) {
+  // Retrieves marker details and place marker on map
+  getMarkers: function(list) {
+    $.each(list, function(place, info) {
       marker = new google.maps.Marker({
         title: info.title,
         position: new google.maps.LatLng(
@@ -57,11 +54,11 @@ var GoogleService = {
         ),
         map: map,
         animation: google.maps.Animation.DROP
-
       });
     });
   },
 
+  // Retrieves the user's current location
   getCurrentLocation: function() {
     // Use W3C Geolocation (preferred by Google Maps API)
     if (navigator.geolocation) {
@@ -87,24 +84,27 @@ var GoogleService = {
     }
   },
 
+  // Searches for the location specified and return a marker on the map
   getLocation: function(location) {
-    var geocoder = new google.maps.Geocoder();
-    var query = GOOGLE_MAP_QUERY + location;
-    $.getJSON(query, function(data) {
-      $.each(data.predictions, function(place, info) {
-        geocoder.geocode({'placeId': info.place_id}, function(results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-            marker = new google.maps.Marker({
-              map: map,
-              position: results[0].geometry.location
-            });
-          } else {
-            console.log('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      })
-    });
+    console.log(location);
+
+    // var geocoder = new google.maps.Geocoder();
+    // var query = GOOGLE_MAP_QUERY + location;
+    // $.getJSON(query, function(data) {
+    //   $.each(data.predictions, function(place, info) {
+    //     geocoder.geocode({'placeId': info.place_id}, function(results, status) {
+    //       if (status === google.maps.GeocoderStatus.OK) {
+    //         map.setCenter(results[0].geometry.location);
+    //         marker = new google.maps.Marker({
+    //           map: map,
+    //           position: results[0].geometry.location
+    //         });
+    //       } else {
+    //         console.log('Geocode was not successful for the following reason: ' + status);
+    //       }
+    //     });
+    //   })
+    // });
   }
 
 };
