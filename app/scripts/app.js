@@ -13,7 +13,7 @@ var ViewModel = function() {
 
   this.searchLocation = function() {
     var searchQuery = self.searchAddress();
-    var place = GoogleService.getLocation(searchQuery);
+    var places = FoursquareService.getVenues(searchQuery);
 
     // reset the searchbox
     self.searchAddress('');
