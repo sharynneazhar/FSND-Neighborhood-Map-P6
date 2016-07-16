@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="GAhYWMESp-t56DXrZTkt9ukt4BwttyzEr_Cwduw654s" />
 
-    <title>Neighborhood Map</title>
+    <title>Naicha Map</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
 
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/splash-screen/dist/splash.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -27,8 +28,9 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div id="map"></div>
+    <div id="loader"></div>
 
+    <div id="map"></div>
     <form id="searchbar" data-bind="submit: searchLocation">
       <img class="search-icon" src="images/icons/icn-menubar.png" alt="Menu" />
       <input
@@ -41,7 +43,6 @@
       <img class="search-icon" src="images/icons/icn-search.png" alt="Search" data-bind="click: searchLocation" />
       <!-- <img class="search-icon" src="images/icons/icn-filter.png" alt="Filter" /> -->
     </form>
-
     <div class="foursquare-logo">
       <img src="images/logos/foursquare@2x.png" alt="Powered by Foursquare" />
     </div>
@@ -49,7 +50,9 @@
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src='/bower_components/knockout/dist/knockout.js'></script>
+    <script src="/bower_components/knockout/dist/knockout.js"></script>
+    <script src="/bower_components/splash-screen/dist/splash.js"></script>
+    <script src="/bower_components/splash-screen/dist/splash.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -69,6 +72,10 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/app.js -->
+    <script>
+      var Splash = window.Splash;
+      Splash.enable('circular');
+    </script>
     <script src="scripts/models/personalAddresses.js"></script>
     <script src="scripts/services/FoursquareService.js"></script>
     <script src="scripts/services/GoogleMapsService.js"></script>

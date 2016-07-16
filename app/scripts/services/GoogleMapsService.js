@@ -122,6 +122,14 @@ var GoogleMapsService = {
           animation: google.maps.Animation.DROP
         });
 
+        if (Splash.isRunning()) {
+          setTimeout(function() {
+            $('#loader').slideUp('slow', function() {
+              Splash.destroy();
+            });
+          }, 3000);
+        }
+
         // Recenter the map
         if (!map.getBounds().contains(marker.getPosition())) {
           map.panTo(marker.getPosition());
