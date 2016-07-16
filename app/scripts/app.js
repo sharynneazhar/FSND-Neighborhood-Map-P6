@@ -10,13 +10,13 @@ var ViewModel = function() {
   self.searchAddress = ko.observable('');
 
   this.searchLocation = function() {
-    GoogleMapsService.clearMarkers();
-
     var searchQuery = self.searchAddress();
-    var places = FoursquareService.getVenues(searchQuery);
+    GoogleMapsService.clearMarkers();
+    FoursquareService.getVenues(searchQuery);
 
     // reset the searchbox
     self.searchAddress('');
+    $('input').blur();
   };
 
 }

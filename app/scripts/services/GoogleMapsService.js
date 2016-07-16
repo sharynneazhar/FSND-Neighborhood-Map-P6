@@ -53,6 +53,7 @@ var GoogleMapsService = {
 
   // Retrieves marker details and place marker on map
   getMarkers: function(list) {
+    var venue;
     $.each(list, function(place, info) {
       var marker = new google.maps.Marker({
         title: info.title,
@@ -63,6 +64,20 @@ var GoogleMapsService = {
         map: map,
         animation: google.maps.Animation.DROP
       });
+
+      var content = '<div id="venue">'
+        + '<div class="venue-name">' + info.title + '</div>'
+        + '<div class="venue-url"><a href="' + info.url + '"> ' + info.url + '</a></div>'
+        + '<div class="venue-address">' + info.address + '</div>'
+        + '<div class="venue-contact">' + info.contact + '</div>'
+        +'</div>';
+
+      var infoWindow = new google.maps.InfoWindow({ content: content });
+
+      marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+      });
+      
       markers.push(marker);
     });
   },

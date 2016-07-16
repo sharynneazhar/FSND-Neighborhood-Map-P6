@@ -17,7 +17,7 @@ var FoursquareService = {
       + '&client_secret=' + FS_SECRET
       + '&v=20130815'
       + '&ll=' + latlng
-      + '&limit=15'
+      + '&limit=10'
       + '&query=' + searchTerm;
 
     var venues = [];
@@ -29,7 +29,10 @@ var FoursquareService = {
       if (hasResponse) {
         $.each(data.response.venues, function(index, venue) {
           var venueObj = {
+            id: venue.id,
             title: venue.name,
+            contact: venue.contact.formattedPhone,
+            url: venue.url,
             lat: venue.location.lat,
             long: venue.location.lng,
             address: venue.location.formattedAddress.join(', ')
