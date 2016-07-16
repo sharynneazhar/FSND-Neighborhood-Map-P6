@@ -51,7 +51,6 @@ var GoogleMapsService = {
     });
   },
 
-  // Retrieves marker details and place marker on map
   getMarkers: function(list) {
     var venue;
     $.each(list, function(place, info) {
@@ -68,16 +67,22 @@ var GoogleMapsService = {
       var content = '<div id="venue">'
         + '<div class="venue-name">' + info.title + '</div>'
         + '<div class="venue-url"><a href="' + info.url + '"> ' + info.url + '</a></div>'
-        + '<div class="venue-address">' + info.address + '</div>'
+        + '<div class="venue-address">' + info.address[0] + '<br>' + info.address[1] + '</div>'
         + '<div class="venue-contact">' + info.contact + '</div>'
         +'</div>';
 
       var infoWindow = new google.maps.InfoWindow({ content: content });
 
       marker.addListener('click', function() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+          setTimeout( function() { marker.setAnimation(null); }, 750);
+        }
         infoWindow.open(map, marker);
       });
-      
+
       markers.push(marker);
     });
   },

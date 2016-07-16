@@ -30,7 +30,7 @@
     <div id="map"></div>
 
     <form id="searchbar" data-bind="submit: searchLocation">
-      <img class="search-menu" src="images/icons/icn-menubar.png" alt="Menu" />
+      <img class="search-icon" src="images/icons/icn-menubar.png" alt="Menu" />
       <input
         class="form-control search-input"
         type="text"
@@ -38,7 +38,8 @@
         placeholder="Search Neighborhood Map"
         data-bind="value: searchAddress"
       />
-      <img class="search-filter" src="images/icons/icn-filter.png" alt="Filter" />
+      <img class="search-icon" src="images/icons/icn-search.png" alt="Search" data-bind="click: searchLocation" />
+      <!-- <img class="search-icon" src="images/icons/icn-filter.png" alt="Filter" /> -->
     </form>
 
     <div class="foursquare-logo">
