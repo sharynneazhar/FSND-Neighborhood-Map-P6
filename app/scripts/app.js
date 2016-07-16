@@ -5,13 +5,13 @@
 // load the Google Maps API
 loadMapScript();
 
-var Location = function(data) {}
-
 var ViewModel = function() {
   var self = this;
   self.searchAddress = ko.observable('');
 
   this.searchLocation = function() {
+    GoogleMapsService.clearMarkers();
+
     var searchQuery = self.searchAddress();
     var places = FoursquareService.getVenues(searchQuery);
 

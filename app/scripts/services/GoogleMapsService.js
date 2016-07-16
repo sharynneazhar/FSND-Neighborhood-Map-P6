@@ -14,7 +14,7 @@ const DIMS = {
 };
 
 var map = null;
-var marker = null;
+var markers = [];
 
 function loadMapScript() {
   var script = document.createElement('script');
@@ -54,7 +54,7 @@ var GoogleMapsService = {
   // Retrieves marker details and place marker on map
   getMarkers: function(list) {
     $.each(list, function(place, info) {
-      marker = new google.maps.Marker({
+      var marker = new google.maps.Marker({
         title: info.title,
         position: new google.maps.LatLng(
           info.lat,
@@ -63,7 +63,26 @@ var GoogleMapsService = {
         map: map,
         animation: google.maps.Animation.DROP
       });
+      markers.push(marker);
     });
+  },
+
+  showMarkers: function(venues) {
+    this.getMarkers(venues);
+    var bounds = new google.maps.LatLngBounds();
+    $.each(markers, function(index, marker) {
+      bounds.extend(marker.getPosition());
+      marker.setMap(map);
+    });
+    // Center the map on visible markers
+    map.fitBounds(bounds);
+  },
+
+  clearMarkers: function() {
+    $.each(markers, function(index, marker) {
+      marker.setMap(null);
+    });
+    markers = [];
   },
 
   // Retrieves the user's current location
@@ -75,12 +94,20 @@ var GoogleMapsService = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        marker = new google.maps.Marker({
+
+        var marker = new google.maps.Marker({
           title: 'You Are Here',
           position: new google.maps.LatLng(currentLocation),
           map: map,
           animation: google.maps.Animation.DROP
         });
+
+        // Recenter the map
+        if (!map.getBounds().contains(marker.getPosition())) {
+          map.panTo(marker.getPosition());
+        }
+
+        GoogleMapsService.currentLocation = currentLocation;
       }, function() {
         // TODO Use better error messaging
         console.log('Oops, we were unable to retrieve your current location.');

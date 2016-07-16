@@ -11,11 +11,12 @@ var FoursquareService = {
 
   // Retrieves all the venues matching search term
   getVenues: function(searchTerm) {
+    var latlng = GoogleMapsService.currentLocation.lat + ',' + GoogleMapsService.currentLocation.lng;
     var queryURL = FS_BASE_URL
       + '?client_id=' + FS_ID
       + '&client_secret=' + FS_SECRET
       + '&v=20130815'
-      + '&near=Kansas City, MO'
+      + '&ll=' + latlng
       + '&limit=15'
       + '&query=' + searchTerm;
 
@@ -36,8 +37,8 @@ var FoursquareService = {
           venues.push(venueObj);
         });
 
-        // Display markers on the map
-        GoogleMapsService.getMarkers(venues);
+        // Show markers on the map
+        GoogleMapsService.showMarkers(venues);
       }
     });
   }
