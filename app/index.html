@@ -28,8 +28,6 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div id="loader"></div>
-
     <div id="map"></div>
     <form id="searchbar" data-bind="submit: searchLocation">
       <img class="search-icon" src="images/icons/icn-menubar.png" alt="Menu" />
@@ -72,10 +70,6 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/app.js -->
-    <script>
-      var Splash = window.Splash;
-      Splash.enable('circular');
-    </script>
     <script src="scripts/models/personalAddresses.js"></script>
     <script src="scripts/services/FoursquareService.js"></script>
     <script src="scripts/services/GoogleMapsService.js"></script>

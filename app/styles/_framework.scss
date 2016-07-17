@@ -4,18 +4,6 @@ html, body {
   overflow: hidden;
 }
 
-#loader {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: $charcoal;
-  z-index: 2;
-}
-
-.splash {
-  z-index: 4;
-}
-
 #map {
   height: 100%;
   width: 100%;

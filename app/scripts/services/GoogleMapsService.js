@@ -122,14 +122,6 @@ var GoogleMapsService = {
           animation: google.maps.Animation.DROP
         });
 
-        if (Splash.isRunning()) {
-          setTimeout(function() {
-            $('#loader').fadeOut('slow', function() {
-              Splash.destroy();
-            });
-          }, 3000);
-        }
-
         // Recenter the map
         if (!map.getBounds().contains(marker.getPosition())) {
           map.panTo(marker.getPosition());
@@ -139,27 +131,10 @@ var GoogleMapsService = {
       }, function() {
         // TODO Use better error messaging
         console.log('Oops, we were unable to retrieve your current location.');
-
-        if (Splash.isRunning()) {
-          setTimeout(function() {
-            $('#loader').fadeOut('slow', function() {
-              Splash.destroy();
-            });
-          }, 3000);
-        }
-
       });
     } else {
       // TODO Use better error messaging
       console.log('Your browser does not support geolocation.');
-
-      if (Splash.isRunning()) {
-        setTimeout(function() {
-          $('#loader').fadeOut('slow', function() {
-            Splash.destroy();
-          });
-        }, 3000);
-      }
     }
   },
 
