@@ -29,13 +29,13 @@ var FoursquareService = {
       if (hasResponse) {
         $.each(data.response.venues, function(index, venue) {
           var venueObj = {
-            id: venue.id,
-            title: venue.name,
+            id: venue.id || '',
+            name: venue.name || '',
             contact: venue.contact.formattedPhone || '',
             url: venue.url || '',
-            lat: venue.location.lat,
-            long: venue.location.lng,
-            address: venue.location.formattedAddress
+            lat: venue.location.lat || '',
+            long: venue.location.lng || '',
+            address: venue.location.formattedAddress || ''
           };
           venues.push(venueObj);
         });

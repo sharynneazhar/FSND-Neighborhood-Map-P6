@@ -28,17 +28,21 @@ var GoogleMapsService = {
 
   // Initializes the map background and markers
   init: function() {
+    this.currentLocation = { lat: 39.0997, lng: -94.5786};
     var mapContainer = document.getElementById('map');
     var mapOptions = {
       zoom: (DIMS.width < 662) ? 10 : 12,
-      center: new google.maps.LatLng(39.0997, -94.5786),
+      center: new google.maps.LatLng(
+        this.currentLocation.lat,
+        this.currentLocation.lng
+      ),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: false,
       streetViewControl: false
     };
 
     map = new google.maps.Map(mapContainer, mapOptions);
-    this.getCurrentLocation();
+    this.showMarkers(RESTAURANTS);
 
     // Hide searchbar in streetview
     var streetView = map.getStreetView();
@@ -53,9 +57,10 @@ var GoogleMapsService = {
 
   getMarkers: function(list) {
     var venue;
+    var infoWindow = new google.maps.InfoWindow();
     $.each(list, function(place, info) {
       var marker = new google.maps.Marker({
-        title: info.title,
+        title: info.name,
         position: new google.maps.LatLng(
           info.lat,
           info.long
@@ -65,21 +70,21 @@ var GoogleMapsService = {
       });
 
       var content = '<div id="venue">'
-        + '<div class="venue-name">' + info.title + '</div>'
-        + '<div class="venue-url"><a href="' + info.url + '"> ' + info.url + '</a></div>'
-        + '<div class="venue-address">' + info.address[0] + '<br>' + info.address[1] + '</div>'
-        + '<div class="venue-contact">' + info.contact + '</div>'
+        + '<div class="venue-name">' + (info.name || '') + '</div>'
+        + '<div class="venue-url"><a href="' + (info.url || '') + '"> ' + (info.url || '') + '</a></div>'
+        + '<div class="venue-address">' + (info.address[0] || '')+ '<br>' + (info.address[1] || '')+ '</div>'
+        + '<div class="venue-contact">' + (info.contact || '') + '</div>'
         +'</div>';
 
-      var infoWindow = new google.maps.InfoWindow({ content: content });
 
-      marker.addListener('click', function() {
+      google.maps.event.addListener(marker, 'click', function() {
         if (marker.getAnimation() !== null) {
           marker.setAnimation(null);
         } else {
           marker.setAnimation(google.maps.Animation.BOUNCE);
           setTimeout( function() { marker.setAnimation(null); }, 750);
         }
+        infoWindow.setContent(content);
         infoWindow.open(map, marker);
       });
 
