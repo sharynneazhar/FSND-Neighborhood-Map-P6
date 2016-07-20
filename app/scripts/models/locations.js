@@ -47,5 +47,32 @@ const LOCATIONS = [
       '1746 Washington St',
       'Kansas City, MO 64108'
     ]
+  },
+  {
+    'name': 'Jack Stack BBQ - Freight House',
+    'lat': 39.087583,
+    'lng': -94.585039,
+    'address': [
+      '101 W 22nd St #300',
+      'Kansas City, MO 64108'
+    ]
+  },
+  {
+    'name': 'Coda',
+    'lat': 39.091239,
+    'lng': -94.589067,
+    'address': [
+      '1744 Broadway St',
+      'Kansas City, MO 64108'
+    ]
+  },
+  {
+    'name': 'Extra Virgin',
+    'lat': 39.090187,
+    'lng': -94.584040,
+    'address': [
+      '1900 Main St',
+      'Kansas City, MO 64108'
+    ]
   }
 ];

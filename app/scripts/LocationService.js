@@ -77,14 +77,20 @@ var LocationService = {
       animation: google.maps.Animation.DROP
     });
 
+    var url;
+    if (location.url === '') {
+      url = '">';
+    } else {
+      url = (location.url || '#') + '" target="_blank">Visit Website';
+    }
+
     var content = '<div id="venue">'
-      + '<div class="venue-name">' + (location.name || '') + '</div>'
-      + '<div class="venue-url"><a href="' + (location.url || '#') + '">Visit Website</a></div>'
+      + '<h5 class="venue-name">' + (location.name || '') + '</h5>'
       + '<div class="venue-address">' + (location.address[0] || '')
       + '<br>' + (location.address[2] || location.address[1] || '') + '</div>'
-      + '<div class="venue-contact">' + (location.contact || '') + '</div>'
-      + '<div class="venue-rating">' + (location.rating || '')
-      + '<img class="venue-rating-img" src="' + (location.ratingImage || '' ) +'" /></div>'
+      + '<div class="venue-contact">' + (location.phone || '') + '</div>'
+      + '<div class="venue-url"><a href="' + url + '</a></div>'
+      + '<div class="venue-rating" style="margin-top:10px"><img src="' + (location.ratingImage || '' ) +'" /></div>'
       +'</div>';
 
     google.maps.event.addListener(marker, 'click', function() {
@@ -168,9 +174,8 @@ var LocationService = {
             phone: loc.display_phone || '',
             url: loc.url || '',
             lat: loc.location.coordinate.latitude || location.lat,
-            lng: loc.location.coordinate.longitude || location.long,
+            lng: loc.location.coordinate.longitude || location.lng,
             address: loc.location.display_address || location.address,
-            rating: loc.rating || '',
             ratingImage: loc.rating_img_url || '',
           };
 
