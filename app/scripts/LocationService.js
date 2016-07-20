@@ -60,67 +60,78 @@ var LocationService = {
     }, 3000);
   },
 
-  // Creates markers with info window popups from a list of locations
-  createMarkers: function(list) {
+  /*
+    Creates markers from a location object
+    @param location - an objects with data retrived from getYelpData()
+  */
+  createMarker: function(location) {
     var infoWindow = new google.maps.InfoWindow();
-    $.each(list, function(place, info) {
-      var marker = new google.maps.Marker({
-        title: info.name,
-        position: new google.maps.LatLng(
-          info.lat,
-          info.lng
-        ),
-        map: map,
-        animation: google.maps.Animation.DROP
-      });
 
-      var content = '<div id="venue">'
-        + '<div class="venue-name">' + (info.name || '') + '</div>'
-        + '<div class="venue-url"><a href="' + (info.url || '') + '">Visit Website</a></div>'
-        + '<div class="venue-address">' + (info.address[0] || '')
-        + '<br>' + (info.address[2] || info.address[1] || '') + '</div>'
-        + '<div class="venue-contact">' + (info.contact || '') + '</div>'
-        + '<div class="venue-rating">' + (info.rating || '') + '<img src="' + (info.ratingImage || '' ) +'" /></div>'
-        +'</div>';
-
-      google.maps.event.addListener(marker, 'click', function() {
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-          setTimeout( function() { marker.setAnimation(null); }, 750);
-        }
-        infoWindow.setContent(content);
-        infoWindow.open(map, marker);
-      });
-
-      markers.push(marker);
+    var marker = new google.maps.Marker({
+      title: location.name,
+      position: new google.maps.LatLng(
+        location.lat,
+        location.lng
+      ),
+      map: map,
+      animation: google.maps.Animation.DROP
     });
+
+    var content = '<div id="venue">'
+      + '<div class="venue-name">' + (location.name || '') + '</div>'
+      + '<div class="venue-url"><a href="' + (location.url || '#') + '">Visit Website</a></div>'
+      + '<div class="venue-address">' + (location.address[0] || '')
+      + '<br>' + (location.address[2] || location.address[1] || '') + '</div>'
+      + '<div class="venue-contact">' + (location.contact || '') + '</div>'
+      + '<div class="venue-rating">' + (location.rating || '')
+      + '<img class="venue-rating-img" src="' + (location.ratingImage || '' ) +'" /></div>'
+      +'</div>';
+
+    google.maps.event.addListener(marker, 'click', function() {
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout( function() { marker.setAnimation(null); }, 750);
+      }
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+    });
+
+    return marker;
   },
 
-  // Displays the markers on the map and recenter map / refit boundaries
-  showMarkers: function(venues) {
-    this.createMarkers(venues);
+  /*
+    Displays all the markers currently in the marker array
+    @param locations - a list of location objects
+  */
+  displayMarkers: function(locations) {
     var bounds = new google.maps.LatLngBounds();
-    $.each(markers, function(index, marker) {
+    $.each(locations, function(index, location) {
+      var marker = LocationService.createMarker(location);
       bounds.extend(marker.getPosition());
       marker.setMap(map);
     });
-    // Center the map on visible markers
     map.fitBounds(bounds);
+    if (DIMS.width > 662) {
+      map.setZoom(17);
+    }
   },
 
-  // Clear existing markers that are displayed on the map
+  // Clears existing markers that are displayed
   clearMarkers: function() {
-    $.each(markers, function(index, marker) {
+    $.each(markerArray, function(index, marker) {
       marker.setMap(null);
     });
-    markers = [];
+    markerArray = [];
   },
 
-  // Retrieve location data from Yelp API
-  getYelpData: function(location) {
-    $.each(location, function(index, info) {
+  /*
+    Retrieve location data from Yelp API
+    @param locations - a list of location objects with a name, coordinates, and address
+  */
+  getYelpData: function(locations) {
+    $.each(locations, function(index, location) {
       var params = {
         oauth_consumer_key: YELP_CONSUMER_KEY,
         oauth_token: YELP_TOKEN,
@@ -129,7 +140,7 @@ var LocationService = {
         oauth_signature_method: 'HMAC-SHA1',
         oauth_version: '1.0',
         callback: 'cb',
-        term: info.name,
+        term: location.name,
         location: 'Kansas City, MO',
         limit: 1
       };
@@ -153,30 +164,26 @@ var LocationService = {
           var loc = data.businesses[0];
           var locObject = {
             id: loc.id || '',
-            name: loc.name || info.name,
+            name: loc.name || location.name,
             phone: loc.display_phone || '',
             url: loc.url || '',
-            lat: loc.location.coordinate.latitude || info.lat,
-            lng: loc.location.coordinate.longitude || info.long,
-            address: loc.location.display_address || info.address,
+            lat: loc.location.coordinate.latitude || location.lat,
+            lng: loc.location.coordinate.longitude || location.long,
+            address: loc.location.display_address || location.address,
             rating: loc.rating || '',
             ratingImage: loc.rating_img_url || '',
           };
-          markerObjects.push(locObject);
+
+          yelpLocations.push(locObject);
         },
         error: function(error) {
           console.log(error)
         }
       });
     });
-
-
   }
 
 };
-
-
-
 
 function loadMapScript() {
   var script = document.createElement('script');
@@ -188,7 +195,7 @@ function loadMapScript() {
 
 function nonceString(length) {
   var text = '';
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     for (var i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
