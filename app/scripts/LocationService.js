@@ -4,11 +4,6 @@
   https://www.yelp.com/developers/
 */
 
-const DIMS = {
-  'height': $(window).height(),
-  'width': $(window).width()
-};
-
 // in reality, these keys should not be stored here
 const GMAP_KEY = '?key=AIzaSyCKioYCg26ODl5A4Z2K03OFkXJRT1mBpRk';
 const GMAP_BASE_URL = 'http://maps.googleapis.com/maps/';
@@ -21,17 +16,25 @@ const YELP_CONSUMER_SECRET = 'PEW3KTxsoUUGWROFC0vpzs2O2GM';
 const YELP_TOKEN = 'eZugQLtOZa7f0ZV2VXRNb76pjTZrUT0T';
 const YELP_TOKEN_SECRET = 'j-DHHnxNR7bvRpc5K7VqdLqmcDc';
 
+const DIMS = {
+  'height': $(window).height(),
+  'width': $(window).width()
+};
+
+var Splash = window.Splash;
+
 var map = null;
-var markerObjects = [];
-var markers = [];
+var yelpLocations = [];
+var markerArray = [];
 
 var LocationService = {
 
   // Set default location
   currentLocation: { lat: 39.090509, lng: -94.589111},
 
-  // Initializes the map background and markers
+  // Initializes the map with all locations displayed
   init: function() {
+    Splash.enable('circular');
     var mapContainer = document.getElementById('map');
     var mapOptions = {
       zoom: (DIMS.width < 662) ? 10 : 12,
@@ -44,10 +47,16 @@ var LocationService = {
       streetViewControl: false
     };
 
+    // Creates the map using Google Map constructor
     map = new google.maps.Map(mapContainer, mapOptions);
     LocationService.getYelpData(LOCATIONS);
+
+    // TODO: Fix this hack stemming from async calls
     setTimeout(function() {
-      LocationService.showMarkers(markerObjects);
+      LocationService.displayMarkers(yelpLocations);
+      if (Splash.isRunning) {
+        Splash.destroy();
+      }
     }, 3000);
   },
 
