@@ -29,14 +29,20 @@
     <![endif]-->
 
     <div id="map"></div>
-    <form id="inputbar" data-bind="submit: filter">
-      <img class="input-icon" src="images/icons/icn-menubar.png" alt="Menu" />
+    <form id="inputbar" data-bind="event: { keyup: filter }">
+      <img
+        class="input-icon"
+        src="images/icons/icn-menubar.png"
+        alt="Menu"
+        data-bind="click: toggle"
+      />
       <input
         class="form-control input"
-        type="text"
+        type="search"
         name="filter"
         placeholder="Filter Locations"
-        data-bind="value: locationFilter"
+        autocomplete="off"
+        data-bind="value: locationFilter, valueUpdate: 'keyup'"
       />
       <img
         class="input-icon"
@@ -46,11 +52,9 @@
       />
     </form>
 
-    <!-- <ul class="filter-list">
-      <li class="filter-item">Test 1</li>
-      <li class="filter-item">Test 2</li>
-      <li class="filter-item">Test 3</li>
-    </ul> -->
+    <ul class="filter-list" data-bind="foreach: filteredLocations, visible: listVisible">
+      <li class="filter-item" data-bind="text: name, click: $parent.openInfo"></li>
+    </ul>
 
     <div class="foursquare-logo">
       <img src="images/logos/foursquare@2x.png" alt="Powered by Foursquare" />

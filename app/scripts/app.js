@@ -10,7 +10,7 @@ var Location = function(data) {
   this.id = ko.observable(data.id);
   this.name = ko.observable(data.name);
   this.phone = ko.observable(data.phone);
-  this.address = ko.observable(data.address);
+  this.address = ko.observableArray(data.address);
   this.lat = ko.observable(data.lat);
   this.lng = ko.observable(data.lng);
   this.url = ko.observable(data.url);
@@ -23,6 +23,7 @@ var ViewModel = function() {
   self.locationFilter = ko.observable('');
   self.locations = ko.observableArray([]);
   self.filteredLocations = ko.observableArray([]);
+  self.listVisible = ko.observable(false);
 
   setTimeout(function() {
     $.each(yelpLocations, function(index, location) {
@@ -31,8 +32,8 @@ var ViewModel = function() {
   }, 3500);
 
   self.filter = function() {
-    Splash.enable('circular');
     self.filteredLocations([]);
+    Splash.enable('circular');
     var query = self.locationFilter().toLowerCase();
     $.each(self.locations(), function(index, location) {
       var locationName = location.name().toLowerCase();
@@ -53,10 +54,33 @@ var ViewModel = function() {
       }, 1000);
     } else {
       alert('No locations found');
-      LocationService.init();
     }
-
   };
+
+  self.openInfo = function() {
+    self.toggle();
+
+    Splash.enable('circular');
+
+    var markObject = [{
+      name: this.name,
+      lat: this.lat,
+      lng: this.lng
+    }];
+
+    LocationService.getYelpData(markObject);
+    setTimeout(function() {
+      LocationService.buildMarkers(yelpLocations);
+      Splash.destroy();
+    }, 1000);
+  };
+
+  self.toggle = function() {
+    if (self.filteredLocations().length <= 0) {
+      self.filter();
+    }
+    self.listVisible(!self.listVisible());
+  }
 
 }
 
