@@ -1,4 +1,4 @@
-# [Neighborhood Map](http://sharynneazhar.com/FSND-Neighborhood-Map-P6/)
+# Neighborhood Map
 A project from Udacity's Full Stack Web Developer Nanodegree Program
 
 #### Project Description
