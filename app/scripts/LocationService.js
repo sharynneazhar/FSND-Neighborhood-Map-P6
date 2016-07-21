@@ -13,6 +13,7 @@ const CURRENT_LOCATION = { lat: 39.090509, lng: -94.589111 };
 var yelpLocations = [];
 var markerArray = [];
 var infoWindow;
+var bounds;
 
 var map = null;
 
@@ -25,6 +26,12 @@ function setMarkers(locationArray) {
   $.each(locationArray, function(index, location) {
     createMarker(location);
   });
+
+  // center the map
+  map.fitBounds(bounds);
+  if (DIMS.width > 662) {
+    map.setZoom(17);
+  }
 }
 
 // Clears existing markers that are displayed
@@ -42,10 +49,14 @@ function clearMarkers() {
 function createMarker(location) {
   var latlng = new google.maps.LatLng(location.lat, location.lng);
   var marker = new google.maps.Marker({
+    title: location.name,
     position: latlng,
     map: map,
     animation: google.maps.Animation.DROP,
   });
+
+  // extend the map bounds to include marker position
+  bounds.extend(marker.position);
 
   var parseURL;
   if (location.url === '') {
@@ -68,12 +79,14 @@ function createMarker(location) {
       marker.setAnimation(null);
     } else {
       marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout( function() { marker.setAnimation(null); }, 750);
+      setTimeout( function() { marker.setAnimation(null); }, 700 * 2);
     }
     infoWindow.setContent(content);
     infoWindow.open(map, marker);
+    map.setCenter(marker.getPosition());
   });
 
+  location.marker = marker;
   markerArray.push(marker);
 }
 
@@ -129,8 +142,7 @@ function getYelpData(locationArray) {
       },
       complete: function() {
         // when all locations have been loaded then display the markers
-        // bad - but ok for this project
-        if (yelpLocations.length === 7) {
+        if (yelpLocations.length === 8) {
           setMarkers(yelpLocations);
           vm.locations(yelpLocations);
           stopLoading();
@@ -159,6 +171,7 @@ function initializeMap() {
     streetViewControl: false
   };
   infoWindow = new google.maps.InfoWindow();
+  bounds = new google.maps.LatLngBounds();
   map = new google.maps.Map(mapContainer, mapOptions);
 
   // load in all the location data and place markers

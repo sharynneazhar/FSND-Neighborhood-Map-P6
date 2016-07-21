@@ -11,57 +11,38 @@ var ViewModel = function() {
   self.filteredVisible = ko.observable(false);
   self.menuVisible = ko.observable(false);
 
+  // Filters the map with locations matching the filter applied
   self.filter = function() {
     Splash.enable('circular');
+
+    // clear previously set filtered locatoins
     self.filteredLocations([]);
+
     var query = self.locationFilter().toLowerCase();
-
-    if (self.locationFilter() === '') {
-      self.toggle();
-      setMarkers(self.locations());
-    }
-
     $.each(self.locations(), function(index, location) {
       var locationName = location.name.toLowerCase();
-      if (locationName.indexOf(query) >= 0) {
+      if (query === '') {
+        location.marker.setVisible(true);
+      } else if (locationName.indexOf(query) >= 0) {
         self.toggle();
-        var loc = {
-          name: location.name,
-          address: location.address,
-          phone: location.phone,
-          lat: location.lat,
-          lng: location.lng,
-          url: location.url,
-          ratingImage: location.ratingImage
-        };
-        self.filteredLocations.push(loc);
+        self.filteredLocations.push(location);
+      } else {
+        location.marker.setVisible(false);
       }
+      stopLoading();
     });
 
-    if (self.filteredLocations().length > 0) {
-      setMarkers(self.filteredLocations());
-      stopLoading();
-    } else {
-      alert('No locations found');
-    }
   };
 
+  // Opens the info window
   self.openInfo = function() {
     self.toggle();
     Splash.enable('circular');
-    var loc = [{
-      name: this.name,
-      address: this.address,
-      phone: this.phone,
-      lat: this.lat,
-      lng: this.lng,
-      url: this.url,
-      ratingImage: this.ratingImage
-    }];
-    setMarkers(loc);
+    google.maps.event.trigger(this.marker, 'click');
     stopLoading();
   };
 
+  // Displays the filtered locations
   self.toggle = function() {
     if (self.menuVisible()) {
       self.toggleMenu();
@@ -69,6 +50,7 @@ var ViewModel = function() {
     self.filteredVisible(!self.filteredVisible());
   };
 
+  // Displays all the locations
   self.toggleMenu = function() {
     if (self.filteredVisible()) {
       self.toggle();
