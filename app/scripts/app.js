@@ -14,29 +14,48 @@ var Location = function(data) {
   this.lat = ko.observable(data.lat);
   this.lng = ko.observable(data.lng);
   this.url = ko.observable(data.url);
-  this.rating = ko.observable(data.rating);
-  this.ratingImage = ko.observable(data.image);
-
-  var marker = new google.maps.Marker({
-    title: this.name(),
-    position: new google.maps.LatLng(
-      this.lat(),
-      this.lng()
-    ),
-    map: map,
-  });
-
-  this.marker = ko.observable(marker);
+  this.ratingImage = ko.observable(data.ratingImage);
 };
 
 var ViewModel = function() {
   var self = this;
 
   self.locationFilter = ko.observable('');
-  self.filteredLocations = ko.observable([]);
+  self.locations = ko.observableArray([]);
+  self.filteredLocations = ko.observableArray([]);
+
+  setTimeout(function() {
+    $.each(yelpLocations, function(index, location) {
+      self.locations.push(new Location(location));
+    });
+  }, 3500);
 
   self.filter = function() {
-    console.log('Filtering ', self.locationFilter());
+    Splash.enable('circular');
+    self.filteredLocations([]);
+    var query = self.locationFilter().toLowerCase();
+    $.each(self.locations(), function(index, location) {
+      var locationName = location.name().toLowerCase();
+      if (locationName.indexOf(query) >= 0) {
+        var loc = {
+          name: location.name(),
+          lat: location.lat(),
+          lng: location.lng(),
+        };
+        self.filteredLocations.push(loc);
+      }
+    });
+
+    if (self.filteredLocations().length > 0) {
+      LocationService.getYelpData(self.filteredLocations());
+      setTimeout(function() {
+        LocationService.buildMarkers(yelpLocations);
+      }, 1000);
+    } else {
+      alert('No locations found');
+      LocationService.init();
+    }
+
   };
 
 }

@@ -53,7 +53,7 @@ var LocationService = {
 
     // TODO: Fix this hack stemming from async calls
     setTimeout(function() {
-      LocationService.displayMarkers(yelpLocations);
+      LocationService.buildMarkers(yelpLocations);
       if (Splash.isRunning) {
         Splash.destroy();
       }
@@ -64,9 +64,7 @@ var LocationService = {
     Creates markers from a location object
     @param location - an objects with data retrived from getYelpData()
   */
-  createMarker: function(location) {
-    var infoWindow = new google.maps.InfoWindow();
-
+  createMarker: function(location, infoWindow) {
     var marker = new google.maps.Marker({
       title: location.name,
       position: new google.maps.LatLng(
@@ -107,20 +105,31 @@ var LocationService = {
     return marker;
   },
 
+  buildMarkers: function(locations) {
+    LocationService.clearMarkers();
+    var infoWindow = new google.maps.InfoWindow();
+    $.each(locations, function(index, location) {
+      markerArray.push(LocationService.createMarker(location, infoWindow));
+    });
+    LocationService.displayMarkers();
+  },
+
   /*
     Displays all the markers currently in the marker array
     @param locations - a list of location objects
   */
-  displayMarkers: function(locations) {
+  displayMarkers: function() {
     var bounds = new google.maps.LatLngBounds();
-    $.each(locations, function(index, location) {
-      var marker = LocationService.createMarker(location);
+    $.each(markerArray, function(index, marker) {
       bounds.extend(marker.getPosition());
       marker.setMap(map);
     });
     map.fitBounds(bounds);
     if (DIMS.width > 662) {
       map.setZoom(17);
+    }
+    if (Splash.isRunning) {
+      Splash.destroy();
     }
   },
 
@@ -137,6 +146,7 @@ var LocationService = {
     @param locations - a list of location objects with a name, coordinates, and address
   */
   getYelpData: function(locations) {
+    yelpLocations = [];
     $.each(locations, function(index, location) {
       var params = {
         oauth_consumer_key: YELP_CONSUMER_KEY,
