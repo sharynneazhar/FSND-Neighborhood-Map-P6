@@ -36,14 +36,48 @@ html, body {
   }
 }
 
-.foursquare-logo {
+.yelp-logo {
   display: block;
-  margin-top: 10px;
-  position: relative;
-  top: -5px;
+  margin-left: 5px;
+  position: fixed;
+  top: 70px;
   left: 10px;
 
   img {
-    height: 25px;
+    height: 30px;
   }
+}
+
+.modal-dialog {
+  width: 80%;
+  margin: 10vh auto;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+  background-color: $light-gray;
+  color: $slate;
+
+  img {
+    height: 64px;
+    width: 64px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    opacity: .8;
+  }
+
+  h3 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  p {
+    text-align: center;
+    font-size: 15px;
+  }
+
 }

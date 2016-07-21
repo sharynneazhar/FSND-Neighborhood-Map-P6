@@ -1,4 +1,7 @@
 // in reality, these keys should not be stored here
+const GMAP_KEY = 'AIzaSyCKioYCg26ODl5A4Z2K03OFkXJRT1mBpRk';
+const GMAP_BASE_URL = 'http://maps.googleapis.com/maps/';
+
 const YELP_BASE_URL = 'http://api.yelp.com/v2/search/';
 const YELP_CONSUMER_KEY = 'TvJZDsVoUcBof1g4Vupo0Q';
 const YELP_CONSUMER_SECRET = 'PEW3KTxsoUUGWROFC0vpzs2O2GM';
@@ -11,14 +14,7 @@ var yelpLocations = [];
 var markerArray = [];
 var infoWindow;
 
-var map = initialize();
-
-if (!map) {
-  alert('Oops, something went wrong with Google Maps. Please try again later!');
-}
-
-getYelpData(LOCATIONS);
-
+var map = null;
 
 /*
   Places all markers on the map
@@ -142,14 +138,14 @@ function getYelpData(locationArray) {
       },
       error: function(error) {
         alert('Oops, something went wrong requesting from Yelp. Please try again!');
-        return;
+        window.location.reload();
       }
     });
   });
 }
 
 // Initializes the Google Map display
-function initialize() {
+function initializeMap() {
   Splash.enable('circular');
   var mapContainer = document.getElementById('map');
   var mapOptions = {
@@ -163,5 +159,17 @@ function initialize() {
     streetViewControl: false
   };
   infoWindow = new google.maps.InfoWindow();
-  return new google.maps.Map(mapContainer, mapOptions);
+  map = new google.maps.Map(mapContainer, mapOptions);
+
+  // load in all the location data and place markers
+  getYelpData(LOCATIONS);
+
+  // Bind the ViewModel once loaded
+  ko.applyBindings(vm);
+}
+
+// Alerts user when Google Maps failed to load
+function initializeMapFail() {
+  console.log('Oops, something went wrong trying to load the map. Please try refreshing the page.');
+  $('#mapErrorModal').modal('show')
 }
