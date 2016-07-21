@@ -54,14 +54,14 @@ function createMarker(location) {
     parseURL = (location.url || '#') + '" target="_blank">Visit Website';
   }
 
-  var content = '<div id="venue">'
-    + '<h5 class="venue-name">' + (location.name || '') + '</h5>'
-    + '<div class="venue-address">' + (location.address[0] || '')
-    + '<br>' + (location.address[2] || location.address[1] || '') + '</div>'
-    + '<div class="venue-contact">' + (location.phone || '') + '</div>'
-    + '<div class="venue-url"><a href="' + parseURL + '</a></div>'
-    + '<div class="venue-rating" style="margin-top:10px"><img src="' + (location.ratingImage || '' ) +'" /></div>'
-    +'</div>';
+  var content = '<div id="venue">' +
+    '<h5 class="venue-name">' + (location.name || '') + '</h5>' +
+    '<div class="venue-address">' + (location.address[0] || '') +
+    '<br>' + (location.address[2] || location.address[1] || '') + '</div>' +
+    '<div class="venue-contact">' + (location.phone || '') + '</div>' +
+    '<div class="venue-url"><a href="' + parseURL + '</a></div>' +
+    '<div class="venue-rating" style="margin-top:10px"><img src="' + (location.ratingImage || '' ) +'" /></div>' +
+    '</div>';
 
   google.maps.event.addListener(marker, 'click', function() {
     if (marker.getAnimation() !== null) {
@@ -171,5 +171,5 @@ function initializeMap() {
 // Alerts user when Google Maps failed to load
 function initializeMapFail() {
   console.log('Oops, something went wrong trying to load the map. Please try refreshing the page.');
-  $('#mapErrorModal').modal('show')
+  $('#mapErrorModal').modal('show');
 }

@@ -16,7 +16,7 @@ function nonceString(length) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
   return text;
-};
+}
 
 function stopLoading() {
   if (Splash.isRunning) {

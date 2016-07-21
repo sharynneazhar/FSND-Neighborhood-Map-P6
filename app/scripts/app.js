@@ -67,15 +67,15 @@ var ViewModel = function() {
       self.toggleMenu();
     }
     self.filteredVisible(!self.filteredVisible());
-  }
+  };
 
   self.toggleMenu = function() {
     if (self.filteredVisible()) {
       self.toggle();
     }
     self.menuVisible(!self.menuVisible());
-  }
+  };
 
-}
+};
 
 var vm = new ViewModel();
