@@ -34,7 +34,7 @@
         class="input-icon"
         src="images/icons/icn-menubar.png"
         alt="Menu"
-        data-bind="click: toggle"
+        data-bind="click: toggleMenu"
       />
       <input
         class="form-control input"
@@ -52,7 +52,11 @@
       />
     </form>
 
-    <ul class="filter-list" data-bind="foreach: filteredLocations, visible: listVisible">
+    <ul class="filter-list" data-bind="foreach: locations, visible: menuVisible">
+      <li class="filter-item" data-bind="text: name, click: $parent.openInfo"></li>
+    </ul>
+
+    <ul class="filter-list" data-bind="foreach: filteredLocations, visible: filteredVisible">
       <li class="filter-item" data-bind="text: name, click: $parent.openInfo"></li>
     </ul>
 
@@ -86,6 +90,8 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/app.js -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKioYCg26ODl5A4Z2K03OFkXJRT1mBpRk&libraries=places"></script>
+    <script src="scripts/utils.js"></script>
     <script src="scripts/models/locations.js"></script>
     <script src="scripts/LocationService.js"></script>
     <script src="scripts/app.js"></script>
