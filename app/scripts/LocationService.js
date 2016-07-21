@@ -126,32 +126,29 @@ function getYelpData(locationArray) {
       cache: true,
       async: true,
       dataType: 'jsonp',
-      success: function(data) {
-        var loc = data.businesses[0];
-        var locObject = {
-          id: loc.id || '',
-          name: loc.name || location.name,
-          phone: loc.display_phone || '',
-          url: loc.url || '',
-          lat: loc.location.coordinate.latitude || location.lat,
-          lng: loc.location.coordinate.longitude || location.lng,
-          address: loc.location.display_address || location.address,
-          ratingImage: loc.rating_img_url || '',
-        };
-        yelpLocations.push(locObject);
-      },
-      complete: function() {
-        // when all locations have been loaded then display the markers
-        if (yelpLocations.length === 8) {
-          setMarkers(yelpLocations);
-          vm.locations(yelpLocations);
-          stopLoading();
-        }
-      },
-      error: function(error) {
-        alert('Oops, something went wrong requesting from Yelp. Please try again!');
-        window.location.reload();
+    }).done(function(data) {
+      var loc = data.businesses[0];
+      var locObject = {
+        id: loc.id || '',
+        name: loc.name || location.name,
+        phone: loc.display_phone || '',
+        url: loc.url || '',
+        lat: loc.location.coordinate.latitude || location.lat,
+        lng: loc.location.coordinate.longitude || location.lng,
+        address: loc.location.display_address || location.address,
+        ratingImage: loc.rating_img_url || '',
+      };
+
+      yelpLocations.push(locObject);
+
+      // when all locations have been loaded then display the markers
+      if (yelpLocations.length === 8) {
+        setMarkers(yelpLocations);
+        vm.locations(yelpLocations);
+        stopLoading();
       }
+    }).fail(function() {
+      errorHandler('Faild to load data from Yelp. Try again later.')
     });
   });
 }
@@ -181,8 +178,12 @@ function initializeMap() {
   ko.applyBindings(vm);
 }
 
-// Alerts user when Google Maps failed to load
-function initializeMapFail() {
-  console.log('Oops, something went wrong trying to load the map. Please try refreshing the page.');
+// Alerts user when an error occurs
+function errorHandler(msg) {
+  if (msg) {
+    $('.error-msg').html(msg);
+  } else {
+    $('.error-msg').html('The page didn\'t load Google Maps correctly. Try refreshing the page or try again later.');
+  }
   $('#mapErrorModal').modal('show');
 }

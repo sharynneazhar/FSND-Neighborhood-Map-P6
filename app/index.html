@@ -72,7 +72,7 @@
           <div class="modal-body center-block">
             <img src="images/icons/icn-broken-link.png" alt="Broken Link" />
             <h3>Oops, something went wrong!</h3>
-            <p>The page didn't load Google Maps correctly. Try refreshing the page or try again later.</p>
+            <p class="error-msg"></p>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -111,7 +111,7 @@
     <script
       async defer
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCKioYCg26ODl5A4Z2K03OFkXJRT1mBpRk&libraries=places&callback=initializeMap"
-      onerror="initializeMapFail()">
+      onerror="errorHandler()">
     </script>
     <!-- endbuild -->
   </body>
